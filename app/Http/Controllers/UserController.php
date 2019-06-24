@@ -17,6 +17,12 @@ class UserController extends Controller
         return User::all();
     }
 
+    public function getuser(Request $request){
+        $data = User::where('id' , Request::get('user_ID'))->get();
+
+        return $data->toJson();
+    }
+
     public function login(Request $request){
             
             $status = 401;
@@ -56,5 +62,12 @@ class UserController extends Controller
                 'user' => $user,
                 'token' => $user->createToken('Forum')->accessToken,
             ]);
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user ->destroy($id);
+        return ['message' => 'Verwijderd'];
     }
 }

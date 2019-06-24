@@ -13,12 +13,19 @@
             <div class="loading" v-if="loading"></div>
                 <ul v-for="user in users" :key="user.id">
                     <li>
+                        <img :src="'./img/delete.png'" class="imgtopics" @click="deleteuser(user)">
                         <h4>{{user.name}}</h4>
                     </li>
                 </ul>
         </div>
         <div class="threadaddcontainer">
             <h3>Topics</h3>
+            <ul v-for="topic in topics" :key="topic.id">
+                <li>
+                    <img :src="'./img/delete.png'" class="imgtopics" @click="deletetopic(topic)">
+                    <h4>{{topic.name}}</h4>
+                </li>
+            </ul>
         </div>
     </div>
 </template>
@@ -33,6 +40,7 @@
                 loading: false,
                 info: '',
                 users: [],
+                topics:[],
             }
         },
 
@@ -42,6 +50,9 @@
                 this.users = response.data
                 this.loading = false
             })
+            axios.get('api/showtopic').then(response => {
+                this.topics = response.data
+            })
         },
 
         methods: {
@@ -49,6 +60,22 @@
                 axios.post('api/threads' , {name: this.name, description: this.info})
                 this.name = ''
                 this.info = ''
+            },
+
+            deleteuser(user){
+                axios.delete('./api/user/' + user.id)
+                axios.get('api/user').then(response => {
+                    this.users = response.data
+                    this.loading = false
+                })
+            },
+
+            deletetopic(topic){
+                axios.delete('./api/topic/' + topic.id)
+                axios.delete('./api/deletecomment/' + topic.id)
+                axios.get('api/showtopic').then(response => {
+                    this.topics = response.data
+                })
             }
         }
     }

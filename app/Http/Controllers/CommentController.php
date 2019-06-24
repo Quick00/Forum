@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Comment;
+use App\User;
+use Illuminate\Support\Facades\DB;
 use Request;
-use App\Threads;
 
-
-class ThreadsController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-         return Threads::all();
+        $data = Comment::where('topics_ID' , Request::get('id'))->get();
+
+        $users = DB::table("users")->join('comments', 'users.id', '=', 'comments.user_id')->select('users.name', 'comments.*')->where('topics_ID' , Request::get('id'))->get();
+        return $users->toJson();
     }
 
     /**
@@ -25,7 +29,7 @@ class ThreadsController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -36,19 +40,16 @@ class ThreadsController extends Controller
      */
     public function store(Request $request)
     {
-        Threads::create($request::all());
-
-
-        return(['message' => 'Dit werkt boi']);
+        Comment::create(Request::all());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Comment $comment)
     {
         //
     }
@@ -56,10 +57,10 @@ class ThreadsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Comment $comment)
     {
         //
     }
@@ -68,10 +69,10 @@ class ThreadsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Comment $comment)
     {
         //
     }
@@ -79,11 +80,12 @@ class ThreadsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        Comment::where('topics_ID' , $id)->delete();
+        return ['message' => 'verwijderd'];
     }
 }

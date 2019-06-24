@@ -38,10 +38,12 @@
 
                         axios.post('api/login', {email, password}).then(response => {
                             let user = response.data.user
+                            let user_ID = user.id
                             let is_admin = user.is_admin
 
                             localStorage.setItem('Forum.user', JSON.stringify(user))
                             localStorage.setItem('Forum.jwt', response.data.token)
+                            localStorage.setItem('Forum.user_ID' , user_ID)
 
                             if (localStorage.getItem('Forum.jwt') != null) {
                                 this.$emit('loggedIn')

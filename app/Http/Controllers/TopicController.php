@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Request;
 use App\Topics;
+use App\Comment;
 
 class TopicController extends Controller
 {
@@ -15,6 +16,13 @@ class TopicController extends Controller
     public function index(Request $request)
     {
         $data = Topics::where('thread_ID' , Request::get('id'))->get();
+
+        return $data->toJson();
+    }
+
+    public function disscusion(Request $request)
+    {
+        $data = Topics::where('id', Request::get('id'))->get();
 
         return $data->toJson();
     }
@@ -37,7 +45,7 @@ class TopicController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Topics::create(Request::all());
     }
 
     /**
@@ -46,9 +54,9 @@ class TopicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        return Topics::all();
     }
 
     /**
@@ -82,6 +90,9 @@ class TopicController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $topic = Topics::findOrFail($id);
+        $topic->destroy($id);
+        return ['message' => 'Verwijderd'];
     }
 }

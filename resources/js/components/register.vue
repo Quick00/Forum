@@ -25,6 +25,7 @@
                     email: "",
                     password: "",
                     c_password: "",
+                    user: '',
                     isLoggedIn: localStorage.getItem('Forum.jwt') != null
                 }
             },
@@ -51,6 +52,8 @@
 
                 axios.post('api/register', {name, email, password, c_password}).then(response =>{
                     let data = response.data
+                    let user_ID = data.user.id
+                    localStorage.setItem('Forum.user_ID', user_ID)
                     localStorage.setItem('Forum.user' , JSON.stringify(data.user))
                     localStorage.setItem('Forum.jwt', data.token)
                     if(localStorage.getItem('Forum.jwt') != null){

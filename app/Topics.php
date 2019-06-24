@@ -12,4 +12,7 @@ class Topics extends Model
      * @var string
      */
     protected $table = 'topics';
+    protected $fillable = [
+        'thread_ID' ,'user_ID', 'name' ,'info',
+    ];
 }

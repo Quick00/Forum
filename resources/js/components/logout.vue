@@ -24,6 +24,7 @@
             logout(){
                 localStorage.removeItem('Forum.jwt')
                 localStorage.removeItem('Forum.user')
+                localStorage.removeItem('Forum.user_ID')
                 this.change()
                 this.$router.push('/')
             }
